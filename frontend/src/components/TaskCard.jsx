@@ -11,7 +11,7 @@ export default function TaskCard({
   onDelete,
 }) {
   return (
-    <div className=" flex gap-4 w-80 border rounded p-6 bg-white hover:shadow-md transition-all ease-in-out">
+    <div className=" flex justify-between gap-4 w-80 border rounded p-6 bg-white hover:shadow-md transition-all ease-in-out">
       <div className=" flex flex-col  gap-6 ">
         <h4 className="text-2xl font-medium">{title}</h4>
         <p className="">{content?.slice(0, 50)}</p>
@@ -27,7 +27,6 @@ export default function TaskCard({
             checked={isDone}
           />
         </div>
-        <Icon svg={Edit} />
       </div>
     </div>
   );

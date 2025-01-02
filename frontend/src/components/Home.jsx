@@ -1,34 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import TaskCard from "./TaskCard";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
+  const [tasks, setTasks] = useState([]);
   const [isDode, setIsDone] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_SERVER_URL}/task`)
+      .then((res) => {
+        setTasks(res.data);
+        localStorage.setItem("tasks", JSON.stringify(res.data));
+      })
+      .catch((err) => console.error("Error fetching tasks:", err));
+  }, []);
 
   function handleModal() {
     setOpen((prev) => !prev);
   }
+
   return (
     <div className="w-screen flex items-center justify-center relative">
       <div className="flex flex-wrap gap-4 py-4 px-6 mt-6">
-        <TaskCard
-          title="test"
-          content="new stask or we do not have in world"
-          date="20-dec-2025"
-          isDone={isDode}
-        />
-        <TaskCard
-          title="To-Do Fask"
-          content="new stask or we do not have in world"
-          date="20-dec-2024"
-          isDone={isDode}
-        />
-        <TaskCard
-          title="Chenge value"
-          content="new stask or we do not have in world lorean value are good"
-          date="20-jan-2024"
-          isDone={isDode}
-        />
+        {tasks.map((task) => (
+          <TaskCard
+            key={task.id}
+            title={task.title}
+            content={task.content}
+            date="20-jan-2024"
+            isDone={task.isDode}
+          />
+        ))}
       </div>
       <div
         className="fixed bottom-16 right-6 w-14 h-14 flex items-center justify-center text-3xl font-bold bg-blue-400 text-white rounded-full shadow-lg cursor-pointer hover:bg-blue-500"

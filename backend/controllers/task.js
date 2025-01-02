@@ -10,7 +10,21 @@ function handleCreateTask(req, res) {
   if (!title || !content) {
     return res.status(400).json({ message: "Title, content is required" });
   }
-  const newTask = { id: Date.now(), title, content, isDone: isDone || false };
+
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
+  const formattedDate = `${year}-${month}-${day}`;
+
+  const newTask = {
+    id: Date.now(),
+    title,
+    content,
+    isDone: isDone || false,
+    date: formattedDate,
+  };
   tasks.push(newTask);
   res.status(201).json(newTask);
 }
