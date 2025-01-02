@@ -6,7 +6,7 @@ export default function TaskCard({
   title,
   date,
   content,
-  isDone,
+  isDone = false,
   onEdit,
   onDelete,
 }) {

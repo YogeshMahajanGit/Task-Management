@@ -3,30 +3,31 @@ import TaskCard from "./TaskCard";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
+  const [isDode, setIsDone] = useState(false);
 
   function handleModal() {
     setOpen((prev) => !prev);
   }
   return (
     <div className="w-screen flex items-center justify-center relative">
-      <div className="flex flex-wrap gap-4 py-4 px-6">
+      <div className="flex flex-wrap gap-4 py-4 px-6 mt-6">
         <TaskCard
           title="test"
           content="new stask or we do not have in world"
           date="20-dec-2025"
-          isDone={true}
+          isDone={isDode}
         />
         <TaskCard
           title="To-Do Fask"
           content="new stask or we do not have in world"
           date="20-dec-2024"
-          isDone={false}
+          isDone={isDode}
         />
         <TaskCard
           title="Chenge value"
           content="new stask or we do not have in world lorean value are good"
           date="20-jan-2024"
-          isDone={true}
+          isDone={isDode}
         />
       </div>
       <div
