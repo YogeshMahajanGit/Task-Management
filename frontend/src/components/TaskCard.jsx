@@ -1,6 +1,6 @@
 import Icon from "./Icon";
 import Del from "../assets/delete.svg";
-import Edit from "../assets/edit.svg";
+// import Edit from "../assets/edit.svg";
 
 export default function TaskCard({
   title,

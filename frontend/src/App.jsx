@@ -1,13 +1,24 @@
 import "./App.css";
-import Home from "./components/Home";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import HomePage from "./pages/HomePage";
+import AddTaskPage from "./pages/AddTaskPage";
 
 function App() {
   return (
-    <>
+    <BrowserRouter>
       <Navbar />
-      <Home />
-    </>
+      <Routes>
+        <Route
+          path="/"
+          element={<HomePage />}
+        />
+        <Route
+          path="/add-tasks"
+          element={<AddTaskPage />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
