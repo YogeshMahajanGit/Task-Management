@@ -1,52 +1,56 @@
-let tasks = [];
+import Task from "../models/task.js";
 
-function handleSendTask(req, res) {
-  return res.status(200).json(tasks);
-}
+async function handleCreateTask(req, res) {
+  const { title, description } = req.body;
 
-function handleCreateTask(req, res) {
-  const { title, content, isDone } = req.body;
-
-  if (!title || !content) {
-    return res.status(400).json({ message: "Title, content is required" });
+  if (!title) {
+    return res.status(400).json({ message: "Title is required" });
   }
 
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
-
-  const formattedDate = `${year}-${month}-${day}`;
-
-  const newTask = {
-    id: Date.now(),
-    title,
-    content,
-    isDone: isDone || false,
-    date: formattedDate,
-  };
-  tasks.push(newTask);
-  res.status(201).json(newTask);
-}
-
-function handleEditTask(req, res) {
-  const { id } = req.params;
-  const { isDone } = req.body;
-
-  const task = tasks.find((task) => task.id === parseInt(id));
-
-  if (!task) {
-    return res.status(404).json({ message: "Task not found" });
+  try {
+    const task = await Task.create({ title, description });
+    res.status(201).json({ message: "Task created", task });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to create task", error });
   }
-  task.isDone = isDone;
-  res.status(200).json(task);
 }
 
-function handleDeleteTask(req, res) {
-  const { id } = req.params;
-
-  tasks = tasks.filter((task) => task.id !== parseInt(id));
-  res.status(200).json({ message: "Task deleted" });
+async function handleGetAllTask(req, res) {
+  try {
+    const tasks = await Task.find({});
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch tasks", error });
+  }
 }
 
-export { handleSendTask, handleCreateTask, handleEditTask, handleDeleteTask };
+async function handleEditTask(req, res) {
+  try {
+    const task = await Task.findById(req.params.id);
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    task.isDone = !task.isDone;
+    await task.save();
+
+    res.status(201).json({ message: "Task Updated", task });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update task", error });
+  }
+}
+
+async function handleDeleteTask(req, res) {
+  try {
+    const task = await Task.findByIdAndDelete(req.params.id);
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+    res.status(200).json({ message: "Task deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete task", error });
+  }
+}
+
+export { handleCreateTask, handleGetAllTask, handleEditTask, handleDeleteTask };

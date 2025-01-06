@@ -3,12 +3,12 @@ import {
   handleCreateTask,
   handleDeleteTask,
   handleEditTask,
-  handleSendTask,
+  handleGetAllTask,
 } from "../controllers/task.js";
 
 const taskRouter = express.Router();
 
-taskRouter.get("/task", handleSendTask);
+taskRouter.get("/task", handleGetAllTask);
 taskRouter.post("/task", handleCreateTask);
 taskRouter.put("/task/:id", handleEditTask);
 taskRouter.delete("/task/:id", handleDeleteTask);

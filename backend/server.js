@@ -1,19 +1,20 @@
 import express from "express";
+import dotenv from "dotenv";
 import cors from "cors";
 import taskRouter from "./routes/task.js";
-import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 
+dotenv.config();
 const app = express();
 
-dotenv.config();
+// Middleware
 app.use(cors());
 app.use(express.json());
 connectDB();
 
 const PORT = 5000 || process.env.PORT;
 
-// GET all tasks
+// Demo
 app.get("/", (req, res) => {
   res.send("Welcome Developer");
 });
