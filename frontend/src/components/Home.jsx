@@ -7,7 +7,7 @@ export default function Home() {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [isDode, setIsDone] = useState(false);
+  // const [isDode, setIsDone] = useState(false);
 
   useEffect(() => {
     axios
