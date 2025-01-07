@@ -5,20 +5,24 @@ import axios from "axios";
 export default function TaskListPage() {
   const [tasks, setTasks] = useState([]);
 
-  useEffect(() => {
-    const loadTasks = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}/task`
-        );
-        setTasks(response.data);
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
-      }
-    };
+  const loadTasks = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/task`
+      );
+      setTasks(sortTasks(response.data));
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+  };
 
+  const sortTasks = (tasks) => {
+    return [...tasks].sort((a, b) => b.isDone - a.isDone);
+  };
+
+  useEffect(() => {
     loadTasks();
-  }, [tasks]);
+  }, []);
 
   const handleToggleStatus = async (id, currentStatus) => {
     try {
@@ -26,11 +30,12 @@ export default function TaskListPage() {
         isDone: !currentStatus,
       });
 
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
+      setTasks((prevTasks) => {
+        const updatedTasks = prevTasks.map((task) =>
           task._id === id ? { ...task, isDone: !currentStatus } : task
-        )
-      );
+        );
+        return sortTasks(updatedTasks);
+      });
     } catch (error) {
       console.error("Error updating task status:", error);
     }
@@ -40,7 +45,10 @@ export default function TaskListPage() {
     try {
       await axios.delete(`${import.meta.env.VITE_SERVER_URL}/task/${id}`);
 
-      setTasks((prevTasks) => prevTasks.filter((task) => task._id !== id));
+      setTasks((prevTasks) => {
+        const updatedTasks = prevTasks.filter((task) => task._id !== id);
+        return sortTasks(updatedTasks);
+      });
     } catch (error) {
       console.error("Error deleting task:", error);
     }
