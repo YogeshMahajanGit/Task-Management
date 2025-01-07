@@ -6,8 +6,9 @@ export default function TaskCard({
   content,
   date,
   isDone,
-  onToggleStatus,
   id,
+  onToggleStatus,
+  onDelete,
 }) {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -17,14 +18,23 @@ export default function TaskCard({
   };
 
   return (
-    <div className="flex justify-between gap-4 w-80 border rounded p-6 bg-white hover:shadow-md transition-all ease-in-out">
+    <div
+      className={`flex justify-between gap-4 w-80 border rounded p-6  hover:shadow-md transition-all ease-in-out ${
+        isDone ? "bg-green-100 border-green-400" : "bg-white"
+      }`}
+    >
       <div className="flex flex-col gap-6">
         <h4 className="text-2xl font-medium">{title}</h4>
         <p className="">{content?.slice(0, 50)}</p>
         <span className="text-xs text-slate-500">{formatDate(date)}</span>
       </div>
       <div className="flex flex-col-reverse gap-8 p-2">
-        <Icon svg={Del} />
+        <button
+          className="hover:bg-red-400 rounded-md"
+          onClick={() => onDelete(id)}
+        >
+          <Icon svg={Del} />
+        </button>
 
         <div>
           <input

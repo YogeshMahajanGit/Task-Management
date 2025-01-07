@@ -17,7 +17,7 @@ async function handleCreateTask(req, res) {
 
 async function handleGetAllTask(req, res) {
   try {
-    const tasks = await Task.find({});
+    const tasks = await Task.find({}).sort({ isDone: -1 });
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch tasks", error });
@@ -42,8 +42,9 @@ async function handleEditTask(req, res) {
 }
 
 async function handleDeleteTask(req, res) {
+  const { id } = req.params;
   try {
-    const task = await Task.findByIdAndDelete(req.params.id);
+    const task = await Task.findByIdAndDelete(id);
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
     }

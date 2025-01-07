@@ -18,10 +18,9 @@ export default function TaskListPage() {
     };
 
     loadTasks();
-  }, []);
+  }, [tasks]);
 
   const handleToggleStatus = async (id, currentStatus) => {
-    // console.log(id, currentStatus);
     try {
       await axios.put(`${import.meta.env.VITE_SERVER_URL}/task/${id}`, {
         isDone: !currentStatus,
@@ -37,6 +36,16 @@ export default function TaskListPage() {
     }
   };
 
+  const handleDeleteTask = async (id) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_SERVER_URL}/task/${id}`);
+
+      setTasks((prevTasks) => prevTasks.filter((task) => task._id !== id));
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-wrap gap-4 py-4 px-6 mt-6">
@@ -47,8 +56,9 @@ export default function TaskListPage() {
             content={task.description}
             date={task.createdAt}
             isDone={task.isDone}
-            onToggleStatus={handleToggleStatus}
             id={task._id}
+            onToggleStatus={handleToggleStatus}
+            onDelete={handleDeleteTask}
           />
         ))}
       </div>
